@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>固件更新</title>
+		<link rel="stylesheet" href="/style.css">
+        <script src="/main.js"></script>
+	</head>
+	<body onload="startup()">
+		<div id="m">
+			<h1>固件更新</h1>
+			<p id="hint">您正在为此设备更新<strong>固件</strong>。<br>请从您的本地计算机上选择一个镜像，并点击 <strong>上传</strong> 按钮。</p>
+			<form id="form">
+				<div id="mtd_layout" style="display: none;">
+					<div id="current_mtd_layout"></div>
+					<br>
+					请选择分区样式:	
+					<select id="mtd_layout_label" name="mtd_layout_label"></select>
+					<br><br>
+				</div>
+				<input id="file" type="file" name="firmware">
+				<input type="button" value="上传" onclick="upload('firmware')">
+			</form>
+			<div>
+				<div class="bar" id="bar" style="display: none; --percent: 0;"></div>
+			</div>
+			<div id="size" style="display: none;">大小: xxxx</div>
+			<div id="md5" style="display: none;">MD5: xxxx</div>
+			<div id="mtd" style="display: none;">分区样式: xxxx</div>
+			<div id="upgrade" style="display: none;">
+				<p>您选择的镜像已上传，请点击 "更新" 按钮以更新。</p>
+				<button class="button" onclick="location = '/flashing.html'">更新</button>
+			</div>
+			<div class="i w">
+				<strong>警告</strong>
+				<ul>
+					<li>1.在更新时不要关闭设备。</li>
+					<li>2.如果一切按照流程如期运行的话，设备会自动重启。</li>
+					<li>3.你可以上传任何你想上传的文件，请确保您选择的是适合本设备的固件镜像。</li>
+				</ul>
+			</div>
+		</div>
+        <div id="version"></div>
+	</body>
+</html>

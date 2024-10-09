@@ -375,8 +375,61 @@ static void mtd_layout_handler(enum httpd_uri_handler_status status,
 	response->info.content_type = "text/plain";
 }
 
+static void switch_key_handler(enum httpd_uri_handler_status status,
+	struct httpd_request *request,
+	struct httpd_response *response)
+{
+	if (status != HTTP_CB_NEW)
+		return;
+
+	response->status = HTTP_RESP_STD;
+	response->info.code = 200;
+	response->info.content_type = "text/plain";
+	if(strcmp(env_get("glbtn_key"),"") != 0){
+		if(strcmp(env_get("glbtn_key"),"reset") == 0){
+			env_set("glbtn_key","mesh");
+		}
+		else{
+			env_set("glbtn_key","reset");
+		}
+		env_save();
+		response->data = "success";
+	}
+	else{
+		response->data = "failed";
+	}
+
+	response->size = strlen(response->data);
+	response->info.connection_close = 1;
+}
+
+static void get_key_handler(enum httpd_uri_handler_status status,
+	struct httpd_request *request,
+	struct httpd_response *response)
+{
+	if (status != HTTP_CB_NEW)
+		return;
+
+	response->status = HTTP_RESP_STD;
+
+	response->data = env_get("glbtn_key");
+
+	response->size = strlen(response->data);
+
+	response->info.code = 200;
+	response->info.connection_close = 1;
+	response->info.content_type = "text/plain";
+}
+
 int start_web_failsafe(void)
 {
+	if(env_get_ulong("isfirstboot",2,1)){
+		env_erase();
+		env_set_ulong("isfirstboot",0);
+		env_set("glbtn_key","reset");
+		env_save();
+	}
+
 	struct httpd_instance *inst;
 
 	inst = httpd_find_instance(80);
@@ -396,7 +449,13 @@ int start_web_failsafe(void)
 	httpd_register_uri_handler(inst, "/cgi-bin/luci/", &index_handler, NULL);
 	httpd_register_uri_handler(inst, "/fail.html", &html_handler, NULL);
 	httpd_register_uri_handler(inst, "/flashing.html", &html_handler, NULL);
+	httpd_register_uri_handler(inst, "/uboot.html", &html_handler, NULL);
+	httpd_register_uri_handler(inst, "/firmware.html", &html_handler, NULL);
+	httpd_register_uri_handler(inst, "/setting.html", &html_handler, NULL);
+	httpd_register_uri_handler(inst, "/bl2.html", &html_handler, NULL);
 	httpd_register_uri_handler(inst, "/getmtdlayout", &mtd_layout_handler, NULL);
+	httpd_register_uri_handler(inst, "/switch_key", &switch_key_handler, NULL);
+	httpd_register_uri_handler(inst, "/get_key", &get_key_handler, NULL);
 #ifdef CONFIG_MTK_BOOTMENU_MMC
 	httpd_register_uri_handler(inst, "/gpt.html", &html_handler, NULL);
 #endif
