@@ -1,0 +1,112 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (c) 2019 MediaTek Inc.
+ * Author: Sam Shih <sam.shih@mediatek.com>
+ */
+
+/dts-v1/;
+#include "mt7622.dtsi"
+#include "mt7622-u-boot.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/linux-event-codes.h>
+
+/ {
+    #address-cells = <1>;
+	#size-cells = <1>;
+	model = "Ruijie RG-X32 Pro";
+	compatible = "ruijie,rg-x32-pro", "mediatek,mt7622-rfb";
+
+    config {
+		u-boot,mmc-env-partition = "u-boot-env";
+        bootcmd = "mtkboardboot";
+		blink_led = "sysled";
+		system_led = "sysled";
+	};
+
+	chosen {
+		stdout-path = &uart0;
+		tick-timer = &timer0;
+	};
+
+	aliases {
+		spi0 = &snor;
+	};
+
+    memory@40000000 {
+		device_type = "memory";
+		reg = <0x40000000 0x10000000>;
+	};
+
+    gpio-keys {
+		compatible = "gpio-keys";
+
+		reset-button {
+			label = "reset";
+			gpios = <&gpio 0 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RESTART>;
+		};
+
+		mesh-button {
+			label = "mesh";
+			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RIGHTALT>;
+		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led@0 {
+			label = "sysled";
+			gpios = <&gpio 81 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+    bl2_verify {
+		bl2_compatible = "spi_nor";
+	};
+};
+
+&pinctrl {
+    snor_pins: snor-pins {
+		mux {
+			function = "flash";
+			groups = "spi_nor";
+		};
+	};
+};
+
+&snor {
+	pinctrl-names = "default";
+	pinctrl-0 = <&snor_pins>;
+	status = "okay";
+
+	spi-flash@0{
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-tx-bus-width = <1>;
+		spi-rx-bus-width = <4>;
+		bootph-all;
+	};
+};
+
+&uart0 {
+	status = "okay";
+};
+
+&eth {
+	status = "okay";
+	mediatek,gmac-id = <0>;
+	phy-mode = "2500base-x";
+	mediatek,switch = "mt7531";
+	reset-gpios = <&gpio 54 GPIO_ACTIVE_HIGH>;
+
+	fixed-link {
+		speed = <2500>;
+		full-duplex;
+	};
+};
+
+&watchdog {
+	status = "disabled";
+};

@@ -9,6 +9,21 @@ obj-y += 404.o
 FILE_404.o := 404.html
 FSPATH_404.o := 404.html
 
+<<<<<<< HEAD
+=======
+obj-y += uboot.o
+FILE_uboot.o := uboot.html
+FSPATH_uboot.o := uboot.html
+
+obj-y += firmware.o
+FILE_firmware.o := firmware.html
+FSPATH_firmware.o := firmware.html
+
+obj-y += setting.o
+FILE_setting.o := setting.html
+FSPATH_setting.o := setting.html
+
+>>>>>>> 4ca91430 (Mod init)
 obj-y += bl2.o
 FILE_bl2.o := bl2.html
 FSPATH_bl2.o := bl2.html

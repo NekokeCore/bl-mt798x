@@ -48,7 +48,7 @@ function getmtdlayoutlist() {
 
             var mtd_layout = mtd_layout_list.split(';');
 
-            document.getElementById('current_mtd_layout').innerHTML = "Current mtd layout: " + mtd_layout[0];
+            document.getElementById('current_mtd_layout').innerHTML = "当前分区表: " + mtd_layout[0];
 
             var e = document.getElementById('mtd_layout_label');
 
@@ -98,14 +98,14 @@ function upload(name) {
                 const info = resp.split(' ');
 
                 document.getElementById('size').style.display = 'block';
-                document.getElementById('size').innerHTML = 'Size: ' + info[0];
+                document.getElementById('size').innerHTML = '大小: ' + info[0];
 
                 document.getElementById('md5').style.display = 'block';
                 document.getElementById('md5').innerHTML = 'MD5: ' + info[1];
 
                 if (info[2]) {
                     document.getElementById('mtd').style.display = 'block';
-                    document.getElementById('mtd').innerHTML = 'MTD layout: ' + info[2];
+                    document.getElementById('mtd').innerHTML = '分区样式: ' + info[2];
                 }
 
                 document.getElementById('upgrade').style.display = 'block';
