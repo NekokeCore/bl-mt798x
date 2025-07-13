@@ -11,6 +11,8 @@
 
 	chosen {
 		stdout-path = &uart0;
+		blink_led = "sys_green";
+		system_led = "sys_red";
 	};
 
 	memory@40000000 {
@@ -40,6 +42,35 @@
 			label = "mesh";
 			linux,code = <BTN_9>;
 			gpios = <&gpio 14 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	gpio-leds {
+		compatible = "gpio-leds";
+
+		led-0 {
+			label = "atm_red";
+			gpios = <&gpio 61 GPIO_ACTIVE_LOW>;
+		};
+
+		led-1 {
+			label = "atm_green";
+			gpios = <&gpio 62 GPIO_ACTIVE_LOW>;
+		};
+
+		led-2 {
+			label = "atm_blue";
+			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
+		};
+
+		led-3 {
+			label = "sys_red";
+			gpios = <&gpio 58 GPIO_ACTIVE_LOW>;
+		};
+
+		led-4 {
+			label = "sys_green";
+			gpios = <&gpio 60 GPIO_ACTIVE_LOW>;
 		};
 	};
 
